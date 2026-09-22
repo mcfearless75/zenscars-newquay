@@ -147,9 +147,10 @@ section{padding:clamp(56px,9vw,112px) 0}
 }
 .hero-media{position:absolute;inset:0;z-index:0}
 .hero-media img{width:100%;height:100%;object-fit:cover;object-position:center;transform:scale(1.08)}
-/* The hero art is 2.33:1. In portrait, cover crops to a narrow centre strip
-   and loses the car, so bias the crop toward it on small screens. */
-@media (max-width:720px){.hero-media img{object-position:70% center}}
+/* Phones get an art-directed portrait crop from <picture>, so no object-position
+   nudge is needed there. A full 100svh hero is also a lot of screen before any
+   content, so it is trimmed on small viewports. */
+@media (max-width:720px){.hero{min-height:min(660px,88svh)}}
 .hero-media::after{
   content:"";position:absolute;inset:0;
   background:linear-gradient(180deg,rgba(11,27,43,.78) 0%,rgba(11,27,43,.55) 38%,rgba(11,27,43,.92) 100%);

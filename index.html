@@ -63,6 +63,15 @@
 <section class="hero">
   <div class="hero-media">
     <picture>
+      <!-- Art direction: the landscape crop is 2.33:1, so on a phone object-fit
+           would cover-crop it to a narrow strip and lose the shot. Portrait
+           crop keeps the car and the coastline in frame. -->
+      <source media="(max-width:720px)" type="image/webp"
+              srcset="./assets/img/hero-coast-portrait-470.webp 470w, ./assets/img/hero-coast-portrait-940.webp 940w"
+              sizes="100vw">
+      <source media="(max-width:720px)"
+              srcset="./assets/img/hero-coast-portrait-470.jpg 470w, ./assets/img/hero-coast-portrait-940.jpg 940w"
+              sizes="100vw">
       <source type="image/webp"
               srcset="./assets/img/hero-coast-768.webp 768w, ./assets/img/hero-coast-1280.webp 1280w, ./assets/img/hero-coast-1916.webp 1916w"
               sizes="100vw">
