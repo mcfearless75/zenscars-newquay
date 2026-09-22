@@ -7,8 +7,8 @@ in a real browser against the deployed pages, not inferred from source.
 Standard: **WCAG 2.2 Level AA**. Severity reflects blocking risk to a client launch.
 
 > **Status: findings 1, 3, 4, 5 and 6 are FIXED** and verified on the live build
-> (commits `6949cc1` onward), as are findings 11 and 11b, reported after launch.
-> Findings 2, 7, 8, 9 and 10 remain open.
+> **All ten findings are now fixed and verified on the live build**, along with
+> 11 and 11b (reported after launch) and 12 and 13 below, found while fixing them.
 >
 > **Correction to an earlier revision of this document:** it gave `#8a6a22` as
 > 5.99:1 on cream. The true figure is **4.40:1 — below the 4.5:1 AA threshold**.
@@ -52,7 +52,7 @@ q.addEventListener('keydown', function(e){
 Better still, make `.faq-q` a real `<button type="button">` and drop the
 `role`/`tabindex` — keyboard behaviour then comes for free and cannot regress.
 
-### 2. Collapsed answers stay in the accessibility tree
+### 2. ~~Collapsed answers stay in the accessibility tree~~ — FIXED
 
 **WCAG 1.3.2 / 4.1.2** · `assets/css/style.css:263`
 
@@ -241,7 +241,7 @@ natural 430×506 — more than double its correct height.
 
 ## MEDIUM
 
-### 7. The mobile menu has no Escape key and no focus containment
+### 7. ~~The mobile menu has no Escape key and no focus containment~~ — FIXED
 
 `assets/js/main.js`
 
@@ -252,20 +252,20 @@ Tab walks straight through into the page behind it.
 **Fix** — close on Escape, move focus to the first link on open, return it to the toggle
 on close.
 
-### 8. 378 inline SVGs, none marked decorative
+### 8. ~~378 inline SVGs, none marked decorative~~ — FIXED
 
 `aria-hidden="true"` appears on **0 of 378** inline `<svg>` elements. Decorative icons
 inside already-labelled links get announced as "graphic", padding every link with noise.
 Add `aria-hidden="true" focusable="false"` to every decorative icon.
 
-### 9. Footer and card links are 16–20px tall
+### 9. ~~Footer and card links are 16–20px tall~~ — FIXED
 
 **WCAG 2.5.8 Target Size (Minimum)** needs 24×24 CSS px. 19 interactive elements measure
 under that at mobile — service links at 20px, the Bluewater credit at 16px. The spacing
 exception may cover some; raising line-height or adding vertical padding clears it
 outright. `.nav-toggle` is 42×42, just under the 44×44 platform guidance.
 
-### 10. The stat counter ignores `prefers-reduced-motion`
+### 10. ~~The stat counter ignores `prefers-reduced-motion`~~ — FIXED
 
 The CSS block at `style.css:316` correctly kills reveals and transitions. The
 `requestAnimationFrame` counter in `main.js` is not gated — numbers still animate for
@@ -277,6 +277,41 @@ if(matchMedia('(prefers-reduced-motion: reduce)').matches){
   el.textContent = target + suffix; return;
 }
 ```
+
+---
+
+## Found while fixing the above
+
+### 12. ~~Eleven FAQ answers were invisible on the service pages~~ — FIXED
+
+**WCAG 1.4.3 (AA)** · `assets/css/style.css`
+
+`.faq-a p` hardcodes `--ink-2`. On `/faq/` the accordion sits on cream, so it reads
+fine — but on the six service pages the FAQ sits inside `.band-dark`, putting
+`#122436` on `#0b1b2b`: **1.1:1**. Eleven answers were effectively invisible unless
+you selected the text. The chevron and the item's bottom rule were light-surface
+assumptions too.
+
+```css
+.band-dark .faq-a p{color:rgba(244,239,230,.85)}   /* 11.2:1 */
+.band-dark .faq-q .chev{color:var(--gold)}          /* 7.26:1 */
+.band-dark .faq-item{border-bottom-color:rgba(244,239,230,.16)}
+```
+
+### 13. ~~The trust card heading was cream on white~~ — FIXED
+
+**WCAG 1.4.3 (AA)** · reported by the client
+
+`.float-card` sets `background:#fff` but no `color`, so inside `.band-dark` — which
+sets `color:var(--cream)` — its `<strong>` inherited cream onto white: **1.15:1**.
+The `<span>` beneath it escaped only because it sets its own colour, which is why
+half the card was readable and half was not. Now `color:var(--ink)` on the card
+itself, so it cannot inherit from whatever it is placed on. **17.41:1.**
+
+Findings 12 and 13 are the same defect as the CTA-band bug the brief says was caught
+during build: a component with a hardcoded colour dropped onto a surface of the
+opposite tone. Worth a rule going forward — **any component with its own background
+must also set its own colour.**
 
 ---
 
@@ -330,13 +365,15 @@ Three things hold it back, none of which require changing the direction:
 | 5 | Fixed header obscures focus | 2.4.11 (AA) | High | **Fixed** |
 | 4 | Focus ring 2.09:1 on white | 1.4.11 (AA) | High | **Fixed** |
 | 6 | Brand overlaps WhatsApp @375px | — | High | **Fixed** |
-| 2 | Collapsed answers still announced | 1.3.2 (A) | Medium | open · 1 rule |
-| 7 | No Escape / focus trap on menu | 2.1.2 (A) | Medium | open · ~15 lines |
-| 10 | Counter ignores reduced-motion | 2.3.3 (AAA) | Medium | open · 2 lines |
-| 8 | 378 undecorated SVGs | 4.1.2 (A) | Medium | open · template pass |
-| 9 | Targets under 24×24 | 2.5.8 (AA) | Low | open · padding |
+| 2 | Collapsed answers still announced | 1.3.2 (A) | Medium | **Fixed** |
+| 7 | No Escape / focus trap on menu | 2.1.2 (A) | Medium | **Fixed** |
+| 10 | Counter ignores reduced-motion | 2.3.3 (AAA) | Medium | **Fixed** |
+| 8 | 378 undecorated SVGs | 4.1.2 (A) | Medium | **Fixed** |
+| 9 | Targets under 24×24 | 2.5.8 (AA) | Low | **Fixed** |
 | 11 | Page pans horizontally on mobile | 1.4.10 (AA) | High | **Fixed** |
 | 11b | Portrait stretched 2x height | — | High | **Fixed** |
+| 12 | 11 FAQ answers invisible on dark | 1.4.3 (AA) | High | **Fixed** |
+| 13 | Trust card heading cream on white | 1.4.3 (AA) | High | **Fixed** |
 
 Findings 1, 3, 4, 5 and 6 are fixed and verified on the live build. The remaining
 five are quality items, none of them launch-blocking.
