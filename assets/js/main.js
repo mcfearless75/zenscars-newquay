@@ -15,16 +15,40 @@
   var toggle = document.querySelector('.nav-toggle');
   var links = document.querySelector('.nav-links');
   if(toggle && links){
-    toggle.addEventListener('click', function(){
-      var open = links.classList.toggle('open');
+    var setMenu = function(open, returnFocus){
+      links.classList.toggle('open', open);
       toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
       document.body.style.overflow = open ? 'hidden' : '';
+      if(open){
+        var first = links.querySelector('a');
+        if(first) first.focus();
+      } else if(returnFocus){
+        toggle.focus();
+      }
+    };
+
+    toggle.addEventListener('click', function(){
+      setMenu(!links.classList.contains('open'), true);
     });
+
     links.querySelectorAll('a').forEach(function(a){
-      a.addEventListener('click', function(){
-        links.classList.remove('open');
-        document.body.style.overflow = '';
-      });
+      a.addEventListener('click', function(){ setMenu(false, false); });
+    });
+
+    // Escape closes the panel and hands focus back to the button.
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape' && links.classList.contains('open')) setMenu(false, true);
+    });
+
+    // Keep Tab inside the open panel — otherwise focus walks into the page
+    // behind it, which is invisible to a keyboard user.
+    links.addEventListener('keydown', function(e){
+      if(e.key !== 'Tab' || !links.classList.contains('open')) return;
+      var items = [toggle].concat(Array.prototype.slice.call(links.querySelectorAll('a')));
+      var first = items[0], last = items[items.length - 1];
+      if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+      else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
     });
   }
 
@@ -45,8 +69,15 @@
   }
 
   // Animated stat counters
+  // The CSS media query kills transitions, but this counter is scripted motion
+  // and has to opt out on its own.
+  var noMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var counters = document.querySelectorAll('[data-count]');
-  if(counters.length && 'IntersectionObserver' in window){
+  if(counters.length && noMotion){
+    counters.forEach(function(el){
+      el.textContent = el.getAttribute('data-count') + (el.getAttribute('data-suffix') || '');
+    });
+  } else if(counters.length && 'IntersectionObserver' in window){
     var cio = new IntersectionObserver(function(entries){
       entries.forEach(function(entry){
         if(!entry.isIntersecting) return;

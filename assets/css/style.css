@@ -246,11 +246,14 @@ section{padding:clamp(56px,9vw,112px) 0}
 .split-media .float-card{
   position:absolute;bottom:-24px;left:-24px;background:#fff;border-radius:var(--radius-md);
   padding:18px 22px;box-shadow:var(--shadow-md);display:flex;align-items:center;gap:14px;max-width:260px;
+  /* The card is white but sits inside .band-dark, which sets color:var(--cream).
+     Without its own colour the heading inherited cream onto white — 1.15:1. */
+  color:var(--ink);
 }
 @media (max-width:520px){.split-media .float-card{position:static;margin-top:16px}}
 .split-media .float-card .icon{width:42px;height:42px;border-radius:10px;background:var(--ink);color:var(--gold-light);display:flex;align-items:center;justify-content:center;flex:none}
 .split-media .float-card .icon svg{width:22px;height:22px}
-.split-media .float-card strong{display:block;font-size:.95rem}
+.split-media .float-card strong{display:block;font-size:.95rem;color:var(--ink)}
 .split-media .float-card span{font-size:.8rem;color:var(--ink-2)}
 
 /* -------- section header -------- */
@@ -296,9 +299,17 @@ section{padding:clamp(56px,9vw,112px) 0}
 .faq-q .chev{display:inline-flex;width:22px;height:22px;flex:none;transition:transform .3s ease;color:var(--gold-on-light)}
 .faq-q .chev svg{width:22px;height:22px}
 .faq-item.open .faq-q .chev{transform:rotate(45deg)}
-.faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease}
+/* visibility:hidden takes collapsed answers out of the accessibility tree and
+   makes anything inside them unfocusable; the 0s delay holds it visible until
+   the collapse animation has finished. */
+.faq-a{max-height:0;overflow:hidden;visibility:hidden;transition:max-height .35s ease,visibility 0s linear .35s}
 .faq-a p{padding-top:14px;color:var(--ink-2)}
-.faq-item.open .faq-a{max-height:600px}
+/* On service pages the FAQ sits inside .band-dark. --ink-2 on --ink is 1.1:1,
+   which rendered 11 answers invisible. The chevron and rule need flipping too. */
+.band-dark .faq-a p{color:rgba(244,239,230,.85)}
+.band-dark .faq-q .chev{color:var(--gold)}
+.band-dark .faq-item{border-bottom-color:rgba(244,239,230,.16)}
+.faq-item.open .faq-a{max-height:600px;visibility:visible;transition:max-height .35s ease,visibility 0s}
 
 /* -------- testimonials / trust -------- */
 .trust-strip{display:flex;flex-wrap:wrap;gap:14px 34px;align-items:center}
@@ -320,6 +331,9 @@ section{padding:clamp(56px,9vw,112px) 0}
 @media (max-width:520px){.footer .grid{grid-template-columns:1fr}}
 .footer h4{color:var(--cream);font-size:.9rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:18px;font-family:var(--font-body);font-weight:700}
 .footer li{margin-bottom:10px}
+/* WCAG 2.5.8 wants 24x24 CSS px. These links were 16-20px tall. */
+.footer a{display:inline-block;padding-block:4px}
+.footer-bottom a{display:inline-block;padding-block:5px}
 .footer a:hover{color:var(--gold-light)}
 .footer-bottom{
   border-top:1px solid rgba(244,239,230,.12);margin-top:56px;padding-top:26px;
