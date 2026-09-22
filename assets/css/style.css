@@ -304,13 +304,12 @@ section{padding:clamp(56px,9vw,112px) 0}
    the collapse animation has finished. */
 .faq-a{
   max-height:0;overflow:hidden;visibility:hidden;
-  /* Longhands, not the shorthand: `transition:...,visibility 0s linear .35s`
-     parsed as a bare `visibility` with no duration, so the delay was dropped
-     and the answer stayed visible after re-closing. */
-  transition-property:max-height,visibility;
-  transition-duration:.35s,0s;
-  transition-timing-function:ease,linear;
-  transition-delay:0s,.35s;
+  /* No transition on visibility. Delaying it so the slide-up finishes first
+     proved unreliable in both shorthand and longhand form, and an answer that
+     stays visible is back in the accessibility tree and focusable — worse than
+     losing a little polish. overflow:hidden clips the text anyway, so hiding
+     it instantly while the container collapses is barely perceptible. */
+  transition:max-height .35s ease;
 }
 .faq-a p{padding-top:14px;color:var(--ink-2)}
 /* On service pages the FAQ sits inside .band-dark. --ink-2 on --ink is 1.1:1,
@@ -318,7 +317,7 @@ section{padding:clamp(56px,9vw,112px) 0}
 .band-dark .faq-a p{color:rgba(244,239,230,.85)}
 .band-dark .faq-q .chev{color:var(--gold)}
 .band-dark .faq-item{border-bottom-color:rgba(244,239,230,.16)}
-.faq-item.open .faq-a{max-height:600px;visibility:visible;transition-delay:0s,0s}
+.faq-item.open .faq-a{max-height:600px;visibility:visible}
 
 /* -------- testimonials / trust -------- */
 .trust-strip{display:flex;flex-wrap:wrap;gap:14px 34px;align-items:center}
