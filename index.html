@@ -63,14 +63,14 @@
 <section class="hero">
   <div class="hero-media">
     <picture>
-      <!-- Art direction: the landscape crop is 2.33:1, so on a phone object-fit
-           would cover-crop it to a narrow strip and lose the shot. Portrait
-           crop keeps the car and the coastline in frame. -->
+      <!-- Art direction: phones get the text-free photographic band cropped out
+           of the supplied portrait artwork. The poster's own wording is excluded
+           deliberately — the H1, lede and buttons below are the real text. -->
       <source media="(max-width:720px)" type="image/webp"
-              srcset="./assets/img/hero-coast-portrait-470.webp 470w, ./assets/img/hero-coast-portrait-940.webp 940w"
+              srcset="./assets/img/hero-mobile-768.webp 768w, ./assets/img/hero-mobile-1024.webp 1024w"
               sizes="100vw">
       <source media="(max-width:720px)"
-              srcset="./assets/img/hero-coast-portrait-470.jpg 470w, ./assets/img/hero-coast-portrait-940.jpg 940w"
+              srcset="./assets/img/hero-mobile-768.jpg 768w, ./assets/img/hero-mobile-1024.jpg 1024w"
               sizes="100vw">
       <source type="image/webp"
               srcset="./assets/img/hero-coast-768.webp 768w, ./assets/img/hero-coast-1280.webp 1280w, ./assets/img/hero-coast-1916.webp 1916w"
