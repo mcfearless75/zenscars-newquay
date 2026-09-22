@@ -302,14 +302,23 @@ section{padding:clamp(56px,9vw,112px) 0}
 /* visibility:hidden takes collapsed answers out of the accessibility tree and
    makes anything inside them unfocusable; the 0s delay holds it visible until
    the collapse animation has finished. */
-.faq-a{max-height:0;overflow:hidden;visibility:hidden;transition:max-height .35s ease,visibility 0s linear .35s}
+.faq-a{
+  max-height:0;overflow:hidden;visibility:hidden;
+  /* Longhands, not the shorthand: `transition:...,visibility 0s linear .35s`
+     parsed as a bare `visibility` with no duration, so the delay was dropped
+     and the answer stayed visible after re-closing. */
+  transition-property:max-height,visibility;
+  transition-duration:.35s,0s;
+  transition-timing-function:ease,linear;
+  transition-delay:0s,.35s;
+}
 .faq-a p{padding-top:14px;color:var(--ink-2)}
 /* On service pages the FAQ sits inside .band-dark. --ink-2 on --ink is 1.1:1,
    which rendered 11 answers invisible. The chevron and rule need flipping too. */
 .band-dark .faq-a p{color:rgba(244,239,230,.85)}
 .band-dark .faq-q .chev{color:var(--gold)}
 .band-dark .faq-item{border-bottom-color:rgba(244,239,230,.16)}
-.faq-item.open .faq-a{max-height:600px;visibility:visible;transition:max-height .35s ease,visibility 0s}
+.faq-item.open .faq-a{max-height:600px;visibility:visible;transition-delay:0s,0s}
 
 /* -------- testimonials / trust -------- */
 .trust-strip{display:flex;flex-wrap:wrap;gap:14px 34px;align-items:center}
