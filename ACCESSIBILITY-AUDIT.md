@@ -6,11 +6,19 @@ in a real browser against the deployed pages, not inferred from source.
 
 Standard: **WCAG 2.2 Level AA**. Severity reflects blocking risk to a client launch.
 
+> **Status: findings 1, 3, 4, 5 and 6 are FIXED** and verified on the live build
+> (commits `6949cc1`, `9f3` onward). Findings 2, 7, 8, 9 and 10 remain open.
+>
+> **Correction to an earlier revision of this document:** it gave `#8a6a22` as
+> 5.99:1 on cream. The true figure is **4.40:1 — below the 4.5:1 AA threshold**.
+> The shipped token is `#7a6025` (5.20:1 on cream, 4.53:1 on cream-dim), same hue
+> and saturation, one step darker.
+
 ---
 
 ## BLOCKER — fails Level A
 
-### 1. The FAQ accordion cannot be operated by keyboard
+### 1. ~~The FAQ accordion cannot be operated by keyboard~~ — FIXED
 
 **WCAG 2.1.1 Keyboard (Level A)** · `assets/js/main.js`, `faq/index.html`
 
@@ -59,7 +67,7 @@ is focusable-but-invisible — but that breaks the moment a link is added.
 
 ## HIGH — fails Level AA
 
-### 3. Gold on cream is 2.09:1 — the eyebrow label fails on every light section
+### 3. ~~Gold on cream is 2.09:1 — the eyebrow fails on every light section~~ — FIXED
 
 **WCAG 1.4.3 Contrast (Minimum)** · `assets/css/style.css:59-62`
 
@@ -83,14 +91,21 @@ subtext). That fix was real but partial; the gold-on-cream pairing survived it.
 cream preserves the brand:
 
 ```css
-:root{ --gold-on-light:#8a6a22; }   /* 5.99:1 on cream — passes AA */
+:root{ --gold-on-light:#7a6025; }   /* 5.20:1 on cream, 4.53:1 on cream-dim */
 .eyebrow{ color:var(--gold-on-light); }
 .faq-q .chev{ color:var(--gold-on-light); }
+.hero .eyebrow,.page-hero .eyebrow,
+.band-dark .eyebrow,.cta-band .eyebrow{ color:var(--gold); }
 ```
 
-Keep `--gold` exactly as-is for everything on ink.
+`--gold` is unchanged for everything on ink. The dark-context override must include
+`.page-hero` — inner pages use that class, not `.hero`, and omitting it would have
+turned every service and area eyebrow dark-on-dark.
 
-### 4. The focus indicator is gold on white — 2.09:1
+**Verified live:** light-context eyebrows and FAQ chevrons 5.20:1; `.band-dark`
+eyebrow still 7.26:1.
+
+### 4. ~~The focus indicator is gold on white — 2.09:1~~ — FIXED
 
 **WCAG 1.4.11 Non-text Contrast** · `assets/css/style.css:336`
 
@@ -105,13 +120,20 @@ default ring over a dark navy hero is unreliable.
 **Fix** — one global rule plus a darker ring on light surfaces:
 
 ```css
-:focus-visible{ outline:3px solid var(--gold-light); outline-offset:2px; }
-.form-field input:focus-visible,
-.form-field select:focus-visible,
-.form-field textarea:focus-visible{ outline:3px solid var(--gold-on-light); }
+:focus-visible{ outline:3px solid var(--gold-on-light); outline-offset:2px; }
+.hero :focus-visible,.page-hero :focus-visible,.band-dark :focus-visible,
+.cta-band :focus-visible,.nav :focus-visible,.sticky-cta :focus-visible,
+.footer :focus-visible{ outline-color:var(--gold-light); }
 ```
 
-### 5. The fixed header obscures anchor targets — including the skip link
+Light surfaces are the default and dark contexts opt into the lighter ring, mirroring
+how `.eyebrow` is handled.
+
+**Verified live with a real Tab press** (programmatic `.focus()` does not trigger
+`:focus-visible`): nav link `#e3c274` at 10.15:1 on ink; form input `#7a6025` at
+5.95:1 on white.
+
+### 5. ~~The fixed header obscures anchor targets — including the skip link~~ — FIXED
 
 **WCAG 2.4.11 Focus Not Obscured (Minimum)** · `assets/css/style.css:36, 85`
 
@@ -129,7 +151,7 @@ html{ scroll-padding-top:calc(var(--nav-h) + 8px); }
 @media (max-width:720px){ html{ scroll-padding-bottom:96px; } }
 ```
 
-### 6. The brand tagline overlaps the WhatsApp button at 375px
+### 6. ~~The brand tagline overlaps the WhatsApp button at 375px~~ — FIXED
 
 **Layout defect** · `assets/css/style.css:94`
 
@@ -146,13 +168,21 @@ pill — visible as a clipped "ZensCa…" wordmark with the gold pill over the t
 tagline is also `font-size:.6rem` — **9.6px**, well under the 12px floor — with `.16em`
 letter-spacing forcing it wider still.
 
-**Fix** — hide it below the width where it stops fitting, and raise it above 12px where
-it does show:
+Hiding the tagline alone was **not sufficient** — the `.brand` wordmark itself still
+overflowed by the same 31px, because the 166px WhatsApp pill squeezes `.brand` below
+its content width. The nav button is redundant at that size anyway: the sticky bottom
+bar already carries both WhatsApp and Call.
 
 ```css
-.brand small{ font-size:.75rem; }          /* 12px */
-@media (max-width:560px){ .brand small{ display:none; } }
+.brand small{ font-size:.75rem; white-space:nowrap; }   /* 12px */
+@media (max-width:560px){
+  .brand small{ display:none; }
+  .nav-cta .btn-primary{ display:none; }
+  .brand{ flex:none; }
+}
 ```
+
+**Verified live at 375px:** wordmark overflow 0px, no horizontal scroll.
 
 ---
 
@@ -238,20 +268,21 @@ Three things hold it back, none of which require changing the direction:
 
 ## Priority
 
-| # | Finding | WCAG | Severity | Effort |
+| # | Finding | WCAG | Severity | Status |
 |---|---|---|---|---|
-| 1 | FAQ keyboard-inoperable | 2.1.1 (A) | Blocker | 5 lines |
-| 3 | Gold on cream 2.09:1 | 1.4.3 (AA) | High | 1 token |
-| 5 | Fixed header obscures focus | 2.4.11 (AA) | High | 2 lines |
-| 4 | Focus ring 2.09:1 on white | 1.4.11 (AA) | High | 1 rule |
-| 6 | Brand overlaps WhatsApp @375px | — | High | 2 rules |
-| 2 | Collapsed answers still announced | 1.3.2 (A) | Medium | 1 rule |
-| 7 | No Escape / focus trap on menu | 2.1.2 (A) | Medium | ~15 lines |
-| 10 | Counter ignores reduced-motion | 2.3.3 (AAA) | Medium | 2 lines |
-| 8 | 378 undecorated SVGs | 4.1.2 (A) | Medium | template pass |
-| 9 | Targets under 24×24 | 2.5.8 (AA) | Low | padding |
+| 1 | FAQ keyboard-inoperable | 2.1.1 (A) | Blocker | **Fixed** |
+| 3 | Gold on cream 2.09:1 | 1.4.3 (AA) | High | **Fixed** |
+| 5 | Fixed header obscures focus | 2.4.11 (AA) | High | **Fixed** |
+| 4 | Focus ring 2.09:1 on white | 1.4.11 (AA) | High | **Fixed** |
+| 6 | Brand overlaps WhatsApp @375px | — | High | **Fixed** |
+| 2 | Collapsed answers still announced | 1.3.2 (A) | Medium | open · 1 rule |
+| 7 | No Escape / focus trap on menu | 2.1.2 (A) | Medium | open · ~15 lines |
+| 10 | Counter ignores reduced-motion | 2.3.3 (AAA) | Medium | open · 2 lines |
+| 8 | 378 undecorated SVGs | 4.1.2 (A) | Medium | open · template pass |
+| 9 | Targets under 24×24 | 2.5.8 (AA) | Low | open · padding |
 
-Findings 1, 3, 4, 5 and 6 are the set to fix before this goes in front of a client.
+Findings 1, 3, 4, 5 and 6 are fixed and verified on the live build. The remaining
+five are quality items, none of them launch-blocking.
 
 ---
 
