@@ -159,7 +159,7 @@ section{padding:clamp(56px,9vw,112px) 0}
    wide, so object-fit crops hard — frame on the car rather than the centre. */
 @media (max-width:720px){
   .hero{min-height:min(660px,88svh)}
-  .hero-media img{object-position:58% center}
+  .hero-media img{object-position:80% center}
 }
 .hero-media::after{
   content:"";position:absolute;inset:0;
