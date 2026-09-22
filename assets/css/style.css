@@ -387,6 +387,10 @@ section{padding:clamp(56px,9vw,112px) 0}
 .skip-link:focus{left:16px;top:16px}
 .form-field{margin-bottom:18px}
 .form-field label{display:block;font-weight:600;font-size:.88rem;margin-bottom:6px}
+.field-error{color:#8c2b1d;font-size:.85rem;font-weight:600;margin:6px 0 0}
+.form-field input[aria-invalid="true"],.form-field textarea[aria-invalid="true"]{border-color:#8c2b1d;border-width:2px}
+.form-alt{font-size:.9rem;color:var(--ink-2);margin-top:14px}
+.form-alt a{text-decoration:underline;font-weight:600}
 .form-field input,.form-field select,.form-field textarea{
   width:100%;padding:13px 16px;border-radius:10px;border:1px solid rgba(11,27,43,.16);
   font-family:var(--font-body);font-size:.96rem;background:#fff;

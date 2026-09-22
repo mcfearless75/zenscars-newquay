@@ -127,11 +127,38 @@
     });
   });
 
-  // Contact form (static demo — wires up to mailto/WhatsApp until a form backend is connected)
+  // Contact form — composes a pre-filled WhatsApp message via a wa.me deep link.
   var form = document.getElementById('bookingForm');
   if(form){
+    // The form carries `novalidate`, which switches off the browser's own
+    // enforcement of the `required` attributes. Without this check an empty
+    // submit still fired, and Wayne received a message with every field blank.
+    var setError = function(field, show){
+      var err = document.getElementById('err-' + field.id);
+      if(err) err.hidden = !show;
+      field.setAttribute('aria-invalid', show ? 'true' : 'false');
+    };
+
+    form.querySelectorAll('[required]').forEach(function(field){
+      field.addEventListener('input', function(){
+        if(field.value.trim()) setError(field, false);
+      });
+    });
+
     form.addEventListener('submit', function(e){
       e.preventDefault();
+
+      var invalid = [];
+      form.querySelectorAll('[required]').forEach(function(field){
+        var empty = !field.value.trim();
+        setError(field, empty);
+        if(empty) invalid.push(field);
+      });
+      if(invalid.length){
+        invalid[0].focus();   // land the user on the first thing to fix
+        return;
+      }
+
       var data = new FormData(form);
       var name = data.get('name') || '';
       var pickup = data.get('pickup') || '';
