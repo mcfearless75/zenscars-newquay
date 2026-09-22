@@ -12,6 +12,10 @@
   --cream-dim:#e7e0d1;
   --gold:#c9a24b;
   --gold-light:#e3c274;
+  /* Same hue (41.4deg) and saturation as --gold, darkened for use on cream.
+     --gold is 2.09:1 on --cream (fails AA); this is 5.20:1 on --cream and
+     4.53:1 on --cream-dim. Never use --gold-on-light on a dark background. */
+  --gold-on-light:#7a6025;
   --red:#c2402e;
   --green-check:#3f7a5c;
   --ink-rgb:11,27,43;
@@ -34,6 +38,10 @@
 
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth}
+/* Keep anchor targets (and the skip link) clear of the fixed header, and of the
+   sticky call bar at mobile widths. Without this they land behind both. */
+html{scroll-padding-top:calc(var(--nav-h) + 8px)}
+@media (max-width:720px){html{scroll-padding-bottom:96px}}
 body{
   margin:0;
   font-family:var(--font-body);
@@ -56,12 +64,17 @@ section{padding:clamp(56px,9vw,112px) 0}
 .h2{font-size:clamp(1.8rem,3.6vw,2.7rem)}
 .h3{font-size:clamp(1.25rem,2.2vw,1.6rem)}
 .lede{font-size:clamp(1.05rem,1.6vw,1.25rem);color:var(--ink-2);max-width:62ch}
+/* Default to the light-surface gold — most eyebrows sit on cream sections.
+   Dark contexts opt back into the brand gold immediately below. */
 .eyebrow{
   display:inline-flex;align-items:center;gap:8px;
   font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--gold);font-weight:700;margin-bottom:14px;
+  color:var(--gold-on-light);font-weight:700;margin-bottom:14px;
 }
-.eyebrow::before{content:"";width:22px;height:2px;background:var(--gold);display:inline-block}
+.eyebrow::before{content:"";width:22px;height:2px;background:var(--gold-on-light);display:inline-block}
+
+.hero .eyebrow,.page-hero .eyebrow,.band-dark .eyebrow,.cta-band .eyebrow{color:var(--gold)}
+.hero .eyebrow::before,.page-hero .eyebrow::before,.band-dark .eyebrow::before,.cta-band .eyebrow::before{background:var(--gold)}
 
 /* -------- buttons -------- */
 .btn{
@@ -91,7 +104,10 @@ section{padding:clamp(56px,9vw,112px) 0}
 .nav .container{display:flex;align-items:center;justify-content:space-between;width:100%}
 .brand{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:600;font-size:1.28rem;color:var(--cream)}
 .brand img{width:34px;height:34px}
-.brand small{display:block;font-family:var(--font-body);font-weight:500;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+.brand small{display:block;font-family:var(--font-body);font-weight:500;font-size:.75rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);white-space:nowrap}
+/* Below 560px the tagline overflows .brand and collides with the WhatsApp
+   button. The sticky bottom bar already carries WhatsApp, so drop it here. */
+@media (max-width:560px){.brand small{display:none}}
 .nav-links{display:flex;align-items:center;gap:30px}
 .nav-links a{color:var(--cream);font-size:.94rem;font-weight:500;opacity:.88;position:relative;padding:6px 0}
 .nav-links a:hover{opacity:1}
@@ -257,7 +273,7 @@ section{padding:clamp(56px,9vw,112px) 0}
 /* -------- FAQ -------- */
 .faq-item{border-bottom:1px solid rgba(11,27,43,.1);padding:22px 0}
 .faq-q{display:flex;align-items:center;justify-content:space-between;gap:20px;cursor:pointer;font-weight:600;font-size:1.05rem;font-family:var(--font-display)}
-.faq-q .chev{display:inline-flex;width:22px;height:22px;flex:none;transition:transform .3s ease;color:var(--gold)}
+.faq-q .chev{display:inline-flex;width:22px;height:22px;flex:none;transition:transform .3s ease;color:var(--gold-on-light)}
 .faq-q .chev svg{width:22px;height:22px}
 .faq-item.open .faq-q .chev{transform:rotate(45deg)}
 .faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease}
@@ -333,6 +349,14 @@ section{padding:clamp(56px,9vw,112px) 0}
   width:100%;padding:13px 16px;border-radius:10px;border:1px solid rgba(11,27,43,.16);
   font-family:var(--font-body);font-size:.96rem;background:#fff;
 }
-.form-field input:focus,.form-field select:focus,.form-field textarea:focus{outline:2px solid var(--gold);outline-offset:1px}
+/* Focus ring. --gold is only 2.09:1 on white/cream, so light surfaces get the
+   darkened gold and dark contexts opt into the lighter one. Both clear the 3:1
+   non-text minimum against their own background. */
+:focus-visible{outline:3px solid var(--gold-on-light);outline-offset:2px}
+.hero :focus-visible,.page-hero :focus-visible,.band-dark :focus-visible,.cta-band :focus-visible,
+.nav :focus-visible,.sticky-cta :focus-visible,.footer :focus-visible{
+  outline-color:var(--gold-light);
+}
+.form-field input:focus-visible,.form-field select:focus-visible,.form-field textarea:focus-visible{outline:3px solid var(--gold-on-light);outline-offset:1px}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 @media (max-width:560px){.two-col{grid-template-columns:1fr}}

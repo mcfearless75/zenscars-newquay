@@ -76,8 +76,23 @@
     if(!q) return;
     q.addEventListener('click', function(){
       var wasOpen = item.classList.contains('open');
-      item.closest('.faq-list').querySelectorAll('.faq-item').forEach(function(i){ i.classList.remove('open'); });
-      if(!wasOpen) item.classList.add('open');
+      item.closest('.faq-list').querySelectorAll('.faq-item').forEach(function(i){
+        i.classList.remove('open');
+        var qq = i.querySelector('.faq-q');
+        if(qq) qq.setAttribute('aria-expanded', 'false');
+      });
+      if(!wasOpen){
+        item.classList.add('open');
+        q.setAttribute('aria-expanded', 'true');
+      }
+    });
+    // A div[role=button] does not synthesise a click from Enter/Space the way a
+    // native <button> does, so without this the accordion is mouse-only.
+    q.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar'){
+        e.preventDefault();   // stop Space scrolling the page
+        q.click();
+      }
     });
   });
 
