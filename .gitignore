@@ -6,3 +6,9 @@ Thumbs.db
 NOTES.local.md
 ChatGPT Image*.png
 tesla.png
+
+# ruflo / claude scaffolding - not part of the deployed site
+.claude/
+.agents/
+.swarm/
+CLAUDE.md
