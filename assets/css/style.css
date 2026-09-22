@@ -105,7 +105,10 @@ section{padding:clamp(56px,9vw,112px) 0}
   transition:background .35s ease,box-shadow .35s ease,backdrop-filter .35s ease;
 }
 .nav.solid{background:rgba(11,27,43,.92);backdrop-filter:blur(10px);box-shadow:0 4px 20px rgba(0,0,0,.18)}
-.nav .container{display:flex;align-items:center;justify-content:space-between;width:100%}
+/* The nav is full-bleed, so it does not need to obey the 1180px content column.
+   Its contents need ~1202px, and capping at 1180 was 22px short — which is what
+   made "Areas Covered", "About Wayne" and the phone number wrap onto two lines. */
+.nav .container{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:1320px}
 .brand{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:600;font-size:1.28rem;color:var(--cream)}
 .brand img{width:34px;height:34px}
 .brand small{display:block;font-family:var(--font-body);font-weight:500;font-size:.75rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);white-space:nowrap}
@@ -117,17 +120,21 @@ section{padding:clamp(56px,9vw,112px) 0}
   .nav-cta .btn-primary{display:none}
   .brand{flex:none}
 }
-.nav-links{display:flex;align-items:center;gap:30px}
-.nav-links a{color:var(--cream);font-size:.94rem;font-weight:500;opacity:.88;position:relative;padding:6px 0}
+.nav-links{display:flex;align-items:center;gap:clamp(18px,1.9vw,30px)}
+.nav-links a{color:var(--cream);font-size:.94rem;font-weight:500;opacity:.88;position:relative;padding:6px 0;white-space:nowrap}
 .nav-links a:hover{opacity:1}
 .nav-links a.active{opacity:1;color:var(--gold-light)}
 .nav-cta{display:flex;align-items:center;gap:14px}
-.nav-call{color:var(--cream);font-weight:600;font-size:.95rem;display:flex;align-items:center;gap:8px}
+.nav-call{color:var(--cream);font-weight:600;font-size:.95rem;display:flex;align-items:center;gap:8px;white-space:nowrap}
+/* Between 1080 and 1240 the full bar cannot fit. Drop the phone-number text
+   first: the WhatsApp button still gives a one-tap action, and the number is
+   repeated in the hero, the sticky bar and the footer. */
+@media (max-width:1240px){.nav-call{display:none}}
 .nav-call svg{width:16px;height:16px;color:var(--gold)}
 .nav-toggle{display:none;background:none;border:none;color:var(--cream);cursor:pointer;padding:8px}
 .nav-toggle svg{width:26px;height:26px}
 
-@media (max-width:920px){
+@media (max-width:1080px){
   .nav-links{
     position:fixed;top:var(--nav-h);left:0;right:0;bottom:0;
     background:var(--ink);flex-direction:column;justify-content:flex-start;
