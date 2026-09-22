@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60" fill="none" role="img" aria-labelledby="zcLogoTitle">
+  <title id="zcLogoTitle">ZensCars private hire car mark</title>
+  <path d="M14 40 L22 24 C24 20 28 18 33 18 L70 18 C75 18 79 20 81 24 L89 40 L89 46 C89 48 87 50 85 50 L79 50 C77 50 75 48 75 46 L75 44 L28 44 L28 46 C28 48 26 50 24 50 L18 50 C16 50 14 48 14 46 Z" fill="#F4EFE6"/>
+  <path d="M33 22 L28 34 L52 34 L52 22 Z" fill="#0B1B2B"/>
+  <path d="M56 22 L56 34 L74 34 L67 22 Z" fill="#0B1B2B"/>
+  <circle cx="27" cy="46" r="5.5" fill="#0B1B2B"/>
+  <circle cx="27" cy="46" r="2.2" fill="#F4EFE6"/>
+  <circle cx="76" cy="46" r="5.5" fill="#0B1B2B"/>
+  <circle cx="76" cy="46" r="2.2" fill="#F4EFE6"/>
+  <path d="M81 30 L89 40 L82 40 L78 30 Z" fill="#C2402E"/>
+</svg>

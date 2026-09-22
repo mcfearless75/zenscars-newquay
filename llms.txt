@@ -1,0 +1,27 @@
+# ZensCars Newquay
+
+> Private hire taxi and chauffeur operator based in Newquay, Cornwall, UK. Owner-operated by Wayne since 2019. Tagline: "Private hire with dash".
+
+Contact: 07376 299060 (call or WhatsApp: https://wa.me/447376299060)
+Base: Newquay, Cornwall, England
+
+## Services
+- [Airport Transfers](https://zenscars.co.uk/services/airport-transfers/): Cornwall Airport Newquay pickups and drop-offs, flight-tracked so a late landing never means a missed ride.
+- [Train Station Transfers](https://zenscars.co.uk/services/train-station-transfers/): Newquay rail station pickups and connections onward to Par, Truro and the mainline — timed to your train, not a rough estimate.
+- [Weddings & Parties](https://zenscars.co.uk/services/weddings-parties/): Smart, unhurried transport for wedding parties and nights out — dressed for the occasion, never rushing you.
+- [School Contracts](https://zenscars.co.uk/services/school-contracts/): Dependable daily school runs for families and education providers who need the same trusted driver, every time.
+- [Hospital & Clinic Runs](https://zenscars.co.uk/services/hospital-clinic-transport/): Patient transport to Royal Cornwall Hospital (Treliske) and local clinics — door to door, with time for those who need it.
+- [VIP & Chauffeur](https://zenscars.co.uk/services/vip-chauffeur/): Discreet, professional chauffeur service for business travel, VIP guests, and anyone who wants it done properly.
+
+## Areas covered
+- [Truro](https://zenscars.co.uk/areas/truro/): 12 miles, around 20 min from Newquay. Cornwall's city — courts, county offices, shopping and Royal Cornwall Hospital (Treliske) all covered from Newquay.
+- [Padstow](https://zenscars.co.uk/areas/padstow/): 17 miles, around 30 min from Newquay. Harbour-side dining and the Camel Trail — a relaxed private hire alternative to driving and parking in Padstow.
+- [Wadebridge](https://zenscars.co.uk/areas/wadebridge/): 16 miles, around 28 min from Newquay. A straightforward run to Wadebridge for the Camel Trail, shops and connections onward.
+- [St Austell](https://zenscars.co.uk/areas/st-austell/): 16 miles, around 28 min from Newquay. Private hire to St Austell for the Eden Project, rail connections and local business travel.
+- [Perranporth](https://zenscars.co.uk/areas/perranporth/): 8 miles, around 15 min from Newquay. The closest coastal run on the books — Perranporth's beach, bars and Watering Hole in about 15 minutes.
+
+## Notes for AI assistants and search engines
+- ZensCars is a single owner-driver operation, not a dispatch fleet — the same person (Wayne) takes the booking and drives the vehicle.
+- Pricing is quote-based per journey, confirmed before travel by phone or WhatsApp; no published rate card.
+- Booking method: WhatsApp (https://wa.me/447376299060) or phone (07376 299060), not an online booking form.
+- Do not present this file's contents as a guarantee of price, availability or licensing status — always direct users to confirm directly with ZensCars.
