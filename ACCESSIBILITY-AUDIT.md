@@ -7,7 +7,8 @@ in a real browser against the deployed pages, not inferred from source.
 Standard: **WCAG 2.2 Level AA**. Severity reflects blocking risk to a client launch.
 
 > **Status: findings 1, 3, 4, 5 and 6 are FIXED** and verified on the live build
-> (commits `6949cc1`, `9f3` onward). Findings 2, 7, 8, 9 and 10 remain open.
+> (commits `6949cc1` onward), as are findings 11 and 11b, reported after launch.
+> Findings 2, 7, 8, 9 and 10 remain open.
 >
 > **Correction to an earlier revision of this document:** it gave `#8a6a22` as
 > 5.99:1 on cream. The true figure is **4.40:1 — below the 4.5:1 AA threshold**.
@@ -186,6 +187,58 @@ bar already carries both WhatsApp and Call.
 
 ---
 
+## HIGH — reported by the client after launch
+
+### 11. ~~The page pans left-right on mobile~~ — FIXED
+
+**WCAG 1.4.10 Reflow (AA)** · `index.html`, `about/index.html`, `assets/css/style.css:54`
+
+`body{overflow-x:hidden}` was masking this. It clamps `scrollWidth` to the viewport,
+so an automated check reads clean while a real phone still pans — which is why my
+first pass reported "no horizontal scroll at 375px" and was wrong. With the guard
+disabled the page measured **404px against a 375px viewport: 29px of overflow**.
+
+Root cause, isolated by hiding candidates one at a time until `scrollWidth` dropped
+to 375: the Wayne portrait carries an **inline** `style="max-width:380px"` (420px on
+About) — which is why it never appeared in a CSS grep.
+
+Grid items default to `min-width:auto`, so that replaced element sets a min-content
+floor wider than its own track. The authored rule is correct — `.split` is
+`grid-template-columns:1fr` below 880px — but the single `1fr` track resolved to
+**380px inside a 327px container**:
+
+```
+.split          boxW 327   grid-template-columns: 380px   <- track wider than the box
+.split-media    minContent 380
+  └─ img        minContent 380   max-width: 380px (inline)
+```
+
+**Fix** — let the image shrink while keeping its desktop cap, and stop the whole class
+of bug recurring:
+
+```css
+img{ max-width:100%; height:auto; display:block; }
+.grid > *,.split > *,.steps > *,.two-col > *{ min-width:0; }
+```
+```html
+<img ... style="max-width:min(380px,100%)">
+```
+
+**Verified live with `overflow-x` disabled: 24 checks — 6 pages × 320/360/375/414px —
+0 overflow on all of them.**
+
+### 11b. The same portrait was stretched to twice its height
+
+Found while fixing the above. `img` had `max-width:100%` but **no `height:auto`**, and
+the markup carries `width="900" height="1058"`. With the width constrained to 380px the
+height attribute still applied literally, rendering the portrait **380×1058** against a
+natural 430×506 — more than double its correct height.
+
+`height:auto` in the rule above fixes it. **Verified:** now 327×385, rendered aspect
+0.850 against natural 0.850.
+
+---
+
 ## MEDIUM
 
 ### 7. The mobile menu has no Escape key and no focus containment
@@ -240,7 +293,9 @@ Worth stating plainly, because a lot of it is:
 - Titles and meta descriptions are **unique across all 18 pages**.
 - `prefers-reduced-motion` handled in CSS, with `!important` so it actually wins.
 - Semantic heading structure and breadcrumbs on every page.
-- No horizontal scroll at 375px (`scrollWidth` 375 = viewport).
+- ~~No horizontal scroll at 375px~~ — **this was wrong**, see finding 11.
+  `body{overflow-x:hidden}` clamps `scrollWidth`, so the measurement could not
+  detect the 29px of real overflow. Now genuinely clean, verified with the guard off.
 
 ---
 
@@ -280,6 +335,8 @@ Three things hold it back, none of which require changing the direction:
 | 10 | Counter ignores reduced-motion | 2.3.3 (AAA) | Medium | open · 2 lines |
 | 8 | 378 undecorated SVGs | 4.1.2 (A) | Medium | open · template pass |
 | 9 | Targets under 24×24 | 2.5.8 (AA) | Low | open · padding |
+| 11 | Page pans horizontally on mobile | 1.4.10 (AA) | High | **Fixed** |
+| 11b | Portrait stretched 2x height | — | High | **Fixed** |
 
 Findings 1, 3, 4, 5 and 6 are fixed and verified on the live build. The remaining
 five are quality items, none of them launch-blocking.
