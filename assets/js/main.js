@@ -144,7 +144,7 @@
     };
     var start = function(){
       if(still || timer || slides.length < 2) return;
-      timer = setInterval(function(){ show(idx + 1); }, 4500);
+      timer = setInterval(function(){ show(idx + 1); }, 3000);
       if(rotToggle) rotToggle.setAttribute('aria-label', 'Pause photo slideshow');
     };
     var stop = function(){
