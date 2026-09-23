@@ -127,6 +127,45 @@
     });
   });
 
+  // About-page photo rotator. Crossfades a small set of photos of Wayne.
+  // Auto-advance is suppressed under prefers-reduced-motion, and the toggle
+  // gives everyone else a way to stop it (WCAG 2.2.2 Pause, Stop, Hide).
+  var rotator = document.querySelector('.photo-rotator');
+  if(rotator){
+    var slides = Array.prototype.slice.call(rotator.querySelectorAll('.rotator-frame img'));
+    var rotToggle = rotator.querySelector('.rotator-toggle');
+    var idx = 0, timer = null;
+    var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    var show = function(n){
+      slides[idx].classList.remove('is-active');
+      idx = (n + slides.length) % slides.length;
+      slides[idx].classList.add('is-active');
+    };
+    var start = function(){
+      if(still || timer || slides.length < 2) return;
+      timer = setInterval(function(){ show(idx + 1); }, 4500);
+      if(rotToggle) rotToggle.setAttribute('aria-label', 'Pause photo slideshow');
+    };
+    var stop = function(){
+      clearInterval(timer); timer = null;
+      if(rotToggle) rotToggle.setAttribute('aria-label', 'Play photo slideshow');
+    };
+
+    if(rotToggle){
+      if(still){
+        rotToggle.hidden = true;          // nothing is moving, so nothing to pause
+      } else {
+        rotToggle.addEventListener('click', function(){ timer ? stop() : start(); });
+      }
+    }
+    // Hold still while someone is reading or tabbing through it.
+    rotator.addEventListener('mouseenter', function(){ if(timer) clearInterval(timer), timer = null; });
+    rotator.addEventListener('mouseleave', function(){ if(rotToggle && rotToggle.getAttribute('aria-label').indexOf('Pause') === 0) start(); });
+    document.addEventListener('visibilitychange', function(){ document.hidden ? clearInterval(timer) : null; });
+    start();
+  }
+
   // Contact form — composes a pre-filled WhatsApp message via a wa.me deep link.
   var form = document.getElementById('bookingForm');
   if(form){

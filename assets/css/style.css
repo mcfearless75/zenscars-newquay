@@ -254,6 +254,31 @@ section{padding:clamp(56px,9vw,112px) 0}
 .split.reverse .split-media{order:2}
 .split-media{position:relative}
 .split-media img{border-radius:var(--radius-lg);box-shadow:var(--shadow-lg)}
+/* -------- photo rotator (About) -------- */
+.photo-rotator{position:relative}
+.rotator-frame{position:relative;aspect-ratio:1/1;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-lg)}
+.rotator-frame img{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  opacity:0;transition:opacity .9s ease;
+}
+.rotator-frame img.is-active{opacity:1}
+/* The toggle satisfies WCAG 2.2.2 - auto-updating content needs a way to stop it. */
+.rotator-toggle{
+  position:absolute;right:12px;bottom:12px;width:40px;height:40px;border-radius:50%;
+  border:1px solid rgba(244,239,230,.35);background:rgba(11,27,43,.72);color:var(--cream);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(6px);
+  transition:background .25s ease,transform .25s ease;
+}
+.rotator-toggle:hover{background:rgba(11,27,43,.9);transform:translateY(-2px)}
+.rotator-toggle svg{width:18px;height:18px}
+.rotator-toggle .i-play{display:none}
+.rotator-toggle[aria-label^="Play"] .i-pause{display:none}
+.rotator-toggle[aria-label^="Play"] .i-play{display:block}
+@media (prefers-reduced-motion: reduce){
+  /* No crossfade and no auto-advance; JS holds it on the first photo. */
+  .rotator-frame img{transition:none}
+}
+
 .split-media .float-card{
   position:absolute;bottom:-24px;left:-24px;background:#fff;border-radius:var(--radius-md);
   padding:18px 22px;box-shadow:var(--shadow-md);display:flex;align-items:center;gap:14px;max-width:260px;

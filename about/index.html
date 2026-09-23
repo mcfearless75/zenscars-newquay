@@ -73,7 +73,26 @@
   <div class="container">
     <div class="split">
       <div class="split-media reveal">
-        <img src="../assets/img/wayne-portrait.jpg" alt="Wayne, owner-driver of ZensCars Newquay" width="900" height="1058" style="max-width:min(420px,100%)">
+        <div class="photo-rotator" style="max-width:min(420px,100%)">
+          <div class="rotator-frame" role="img" aria-label="Wayne, owner-driver of ZensCars Newquay">
+            <img class="is-active" aria-hidden="true" alt="" width="800" height="800" fetchpriority="high"
+                 src="../assets/img/wayne-1-800.jpg"
+                 srcset="../assets/img/wayne-1-400.jpg 400w, ../assets/img/wayne-1-800.jpg 800w" sizes="(max-width:520px) 100vw, 420px">
+            <img aria-hidden="true" alt="" width="800" height="800" loading="lazy"
+                 src="../assets/img/wayne-2-800.jpg"
+                 srcset="../assets/img/wayne-2-400.jpg 400w, ../assets/img/wayne-2-800.jpg 800w" sizes="(max-width:520px) 100vw, 420px">
+            <img aria-hidden="true" alt="" width="800" height="800" loading="lazy"
+                 src="../assets/img/wayne-3-800.jpg"
+                 srcset="../assets/img/wayne-3-400.jpg 400w, ../assets/img/wayne-3-800.jpg 800w" sizes="(max-width:520px) 100vw, 420px">
+            <img aria-hidden="true" alt="" width="800" height="800" loading="lazy"
+                 src="../assets/img/wayne-4-800.jpg"
+                 srcset="../assets/img/wayne-4-400.jpg 400w, ../assets/img/wayne-4-800.jpg 800w" sizes="(max-width:520px) 100vw, 420px">
+          </div>
+          <button type="button" class="rotator-toggle" aria-label="Pause photo slideshow">
+            <svg class="i-pause" aria-hidden="true" focusable="false" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+            <svg class="i-play" aria-hidden="true" focusable="false" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5l11 7-11 7z"/></svg>
+          </button>
+        </div>
       </div>
       <div class="reveal">
         <div class="eyebrow">In his own words</div>
